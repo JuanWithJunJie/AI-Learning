@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenMAIC · AI 交互课堂 × 制造业培训</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f10;
+    --bg2: #13161a;
+    --bg3: #1a1f26;
+    --border: rgba(255,255,255,0.07);
+    --border-hi: rgba(255,180,60,0.35);
+    --amber: #F59E0B;
+    --amber-dim: rgba(245,158,11,0.12);
+    --amber-glow: rgba(245,158,11,0.22);
+    --teal: #2DD4BF;
+    --teal-dim: rgba(45,212,191,0.10);
+    --blue: #60A5FA;
+    --blue-dim: rgba(96,165,250,0.10);
+    --red: #F87171;
+    --red-dim: rgba(248,113,113,0.10);
+    --text-primary: #F0EDE8;
+    --text-secondary: #9A9790;
+    --text-muted: #5A5855;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Noto Sans SC', sans-serif;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--sans);
+    line-height: 1.7;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    padding: 72px 0 64px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% -10%, rgba(245,158,11,0.13) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 20% 110%, rgba(45,212,191,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  .hero-inner { position: relative; z-index: 1; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--amber-dim);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: var(--amber);
+    font-size: 11px;
+    font-family: var(--mono);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    padding: 4px 12px;
+    border-radius: 99px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .title-accent { color: var(--amber); }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-bottom: 40px;
+    letter-spacing: 0.01em;
+  }
+
+  .hero-origin {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 40px;
+  }
+
+  .hero-cta-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--amber);
+    color: #0d0f10;
+  }
+  .btn-primary:hover { background: #FBBF24; transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--text-primary); }
+
+  /* ─── LAYOUT ─── */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  section { padding: 64px 0; }
+  section + section { border-top: 1px solid var(--border); }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .section-desc {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    line-height: 1.75;
+  }
+
+  /* ─── PROBLEM BAR ─── */
+  .problem-bar {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .problem-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .problem-label {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--red);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .problem-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ─── CAPABILITY CARDS ─── */
+  .caps-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 36px;
+  }
+
+  .cap-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .cap-card:hover {
+    border-color: var(--border-hi);
+    transform: translateY(-2px);
+  }
+
+  .cap-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .cap-amber::before { background: linear-gradient(90deg, var(--amber), transparent); }
+  .cap-teal::before  { background: linear-gradient(90deg, var(--teal), transparent); }
+  .cap-blue::before  { background: linear-gradient(90deg, var(--blue), transparent); }
+  .cap-red::before   { background: linear-gradient(90deg, var(--red), transparent); }
+
+  .cap-icon {
+    width: 40px; height: 40px;
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .cap-amber .cap-icon { background: var(--amber-dim); }
+  .cap-teal .cap-icon  { background: var(--teal-dim); }
+  .cap-blue .cap-icon  { background: var(--blue-dim); }
+  .cap-red .cap-icon   { background: var(--red-dim); }
+
+  .cap-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+
+  .cap-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .cap-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .tag {
+    font-size: 11px;
+    font-family: var(--mono);
+    padding: 3px 10px;
+    border-radius: 99px;
+    border: 1px solid;
+  }
+
+  .tag-amber { color: var(--amber); border-color: rgba(245,158,11,0.25); background: var(--amber-dim); }
+  .tag-teal  { color: var(--teal);  border-color: rgba(45,212,191,0.25);  background: var(--teal-dim); }
+  .tag-blue  { color: var(--blue);  border-color: rgba(96,165,250,0.25);  background: var(--blue-dim); }
+  .tag-red   { color: var(--red);   border-color: rgba(248,113,113,0.25); background: var(--red-dim); }
+
+  /* ─── HOW IT WORKS ─── */
+  .flow-steps {
+    margin-top: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .flow-step {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 0 20px;
+    position: relative;
+  }
+
+  .flow-step:not(:last-child) .step-line {
+    position: absolute;
+    left: 27px;
+    top: 52px;
+    bottom: -24px;
+    width: 2px;
+    background: linear-gradient(to bottom, rgba(245,158,11,0.3), transparent);
+  }
+
+  .step-num {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border-hi);
+    background: var(--amber-dim);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--amber);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-content {
+    padding-bottom: 36px;
+  }
+
+  .step-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .step-example {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: var(--bg3);
+    border-radius: var(--radius);
+    border-left: 2px solid var(--amber);
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--text-secondary);
+  }
+
+  /* ─── USECASES ─── */
+  .usecase-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 36px;
+  }
+
+  .usecase-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    transition: border-color 0.2s;
+  }
+
+  .usecase-card:hover { border-color: rgba(45,212,191,0.3); }
+
+  .uc-icon { font-size: 24px; margin-bottom: 12px; }
+
+  .uc-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+  }
+
+  .uc-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  /* ─── SPEC TABLE ─── */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 28px;
+    font-size: 13px;
+  }
+
+  .spec-table th {
+    text-align: left;
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+
+  .spec-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    vertical-align: top;
+  }
+
+  .spec-table tr:last-child td { border-bottom: none; }
+  .spec-table td:first-child { color: var(--text-primary); font-weight: 500; }
+  .spec-table tr:hover td { background: var(--bg2); }
+
+  .check { color: var(--teal); font-size: 14px; }
+
+  /* ─── VALUE SECTION ─── */
+  .value-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 36px;
+  }
+
+  .value-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    text-align: center;
+  }
+
+  .value-num {
+    font-size: 2.8rem;
+    font-weight: 700;
+    font-family: var(--mono);
+    color: var(--amber);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .value-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  /* ─── AGENT DEMO ─── */
+  .chat-demo {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-top: 32px;
+  }
+
+  .chat-header {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .agent-dots { display: flex; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-r { background: #F87171; } .dot-y { background: #FBBF24; } .dot-g { background: #34D399; }
+
+  .chat-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+
+  .msg {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .msg.right { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; flex-shrink: 0;
+  }
+
+  .av-teacher  { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .av-peer     { background: var(--teal-dim);  color: var(--teal);  border: 1px solid rgba(45,212,191,0.3); }
+  .av-user     { background: var(--blue-dim);  color: var(--blue);  border: 1px solid rgba(96,165,250,0.3); }
+
+  .bubble {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .bubble-teacher { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.12); }
+  .bubble-peer    { background: rgba(45,212,191,0.07);  border: 1px solid rgba(45,212,191,0.12); }
+  .bubble-user    { background: rgba(96,165,250,0.08);  border: 1px solid rgba(96,165,250,0.12); }
+
+  .bubble-name {
+    font-size: 10px;
+    font-family: var(--mono);
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  .bn-teacher { color: var(--amber); }
+  .bn-peer    { color: var(--teal); }
+  .bn-user    { color: var(--blue); }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .footer-logo span { color: var(--amber); }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin: 16px 0;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--amber); }
+
+  .footer-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border-hi), transparent);
+    margin: 0;
+  }
+
+  /* ─── HIGHLIGHT BOX ─── */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(245,158,11,0.07) 0%, rgba(45,212,191,0.05) 100%);
+    border: 1px solid var(--border-hi);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin-top: 36px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .hb-icon { font-size: 28px; flex-shrink: 0; }
+
+  .hb-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+  }
+
+  .hb-body {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 680px) {
+    .caps-grid, .value-grid { grid-template-columns: 1fr; }
+    .usecase-grid { grid-template-columns: repeat(2, 1fr); }
+    .problem-bar { grid-template-columns: 1fr; }
+    h1 { font-size: 2rem; }
+    .hero { padding: 48px 0 40px; }
+    section { padding: 48px 0; }
+  }
+
+  @media (max-width: 480px) {
+    .usecase-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="grid-overlay"></div>
+  <div class="container hero-inner">
+    <div class="badge">AI + 制造业培训 · 推荐项目</div>
+    <h1>让每一份内部知识<br>变成<span class="title-accent">沉浸式课堂</span></h1>
+    <p class="hero-sub">一键将 SOP、作业指导书、培训材料转化为多智能体互动课堂</p>
+    <p class="hero-origin">开源项目 · 清华大学 MAIC 团队 · 论文已发表于 JCST 2026</p>
+    <div class="hero-cta-row">
+      <a href="https://open.maic.chat/" class="btn btn-primary" target="_blank">▶ 在线体验 Demo</a>
+      <a href="https://github.com/THU-MAIC/OpenMAIC" class="btn btn-ghost" target="_blank">⊕ GitHub 项目页</a>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section>
+  <div class="container">
+    <div class="section-label">Pain Point</div>
+    <h2>制造业培训的三大痛点</h2>
+    <p class="section-desc">传统培训方式在智能制造时代面临的挑战</p>
+
+    <div class="problem-bar" style="margin-top: 28px;">
+      <div class="problem-item">
+        <span class="problem-label">⚡ 效率瓶颈</span>
+        <p class="problem-text">新员工要消化大量 SOP、作业指导书，传统阅读模式枯燥、留存率低，培训周期长。</p>
+      </div>
+      <div class="problem-item">
+        <span class="problem-label">⚡ 知识沉淀难</span>
+        <p class="problem-text">老师傅的经验难以系统化转化；PPT 和视频制作成本高、更新慢、互动性差。</p>
+      </div>
+      <div class="problem-item">
+        <span class="problem-label">⚡ 场景覆盖不足</span>
+        <p class="problem-text">设备操作、安全规程、质量检验……不同岗位培训需求碎片化，很难做到因材施教。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IS IT -->
+<section>
+  <div class="container">
+    <div class="section-label">What is OpenMAIC</div>
+    <h2>OpenMAIC 是什么？</h2>
+    <p class="section-desc">
+      OpenMAIC（Open Multi-Agent Interactive Classroom）是清华大学开源的 AI 互动课堂平台。输入一个话题或上传一份文档，AI 自动生成包含课件讲解、互动测验、模拟实验和项目实践的完整课堂，并由多个 AI 角色（老师 + 同学）实时协作讲解。
+    </p>
+
+    <div class="highlight-box">
+      <div class="hb-icon">⚙️</div>
+      <div>
+        <p class="hb-title">对于我们制造中心的意义</p>
+        <p class="hb-body">
+          将现有的设备手册、工艺文件、安全规程上传 → AI 在数分钟内生成可互动的培训课堂。
+          员工可以边听讲解边追问，AI 老师实时回答并在白板上画图演示，告别"念文件式"培训。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section>
+  <div class="container">
+    <div class="section-label">Core Capabilities</div>
+    <h2>四大核心能力</h2>
+    <p class="section-desc">覆盖从知识传授到实践验证的完整培训闭环</p>
+
+    <div class="caps-grid">
+      <!-- Slides -->
+      <div class="cap-card cap-amber">
+        <div class="cap-icon">🎓</div>
+        <div class="cap-title">AI 教师讲课 · 智能幻灯片</div>
+        <div class="cap-desc">
+          AI 教师携带语音旁白、激光笔动效，像真实课堂一样逐步讲解。自动将文档拆解为结构化课件，支持导出为可编辑 PPT。
+        </div>
+        <div class="cap-tags">
+          <span class="tag tag-amber">TTS 语音</span>
+          <span class="tag tag-amber">导出 PPTX</span>
+          <span class="tag tag-amber">白板手绘</span>
+        </div>
+      </div>
+
+      <!-- Quiz -->
+      <div class="cap-card cap-teal">
+        <div class="cap-icon">🧪</div>
+        <div class="cap-title">智能测验 · 实时反馈</div>
+        <div class="cap-desc">
+          自动从培训材料中生成单选、多选、简答题。员工作答后，AI 即时批改并给出针对性讲解，精准定位知识薄弱点。
+        </div>
+        <div class="cap-tags">
+          <span class="tag tag-teal">自动出题</span>
+          <span class="tag tag-teal">即时评分</span>
+          <span class="tag tag-teal">错因分析</span>
+        </div>
+      </div>
+
+      <!-- Simulation -->
+      <div class="cap-card cap-blue">
+        <div class="cap-icon">🔬</div>
+        <div class="cap-title">交互式模拟 · 可视化实验</div>
+        <div class="cap-desc">
+          生成可操作的 HTML 仿真场景，如工艺流程图、设备参数调节、故障诊断模拟。让员工在安全环境中动手"操作"并观察结果。
+        </div>
+        <div class="cap-tags">
+          <span class="tag tag-blue">流程仿真</span>
+          <span class="tag tag-blue">参数可调</span>
+          <span class="tag tag-blue">导出 HTML</span>
+        </div>
+      </div>
+
+      <!-- PBL -->
+      <div class="cap-card cap-red">
+        <div class="cap-icon">🏗️</div>
+        <div class="cap-title">项目实践学习 · AI 协作</div>
+        <div class="cap-desc">
+          基于真实制造场景设定 PBL 任务（如：分析一起质量异常、优化一段工艺路线），员工选择角色，与 AI 同学协作完成项目里程碑。
+        </div>
+        <div class="cap-tags">
+          <span class="tag tag-red">角色扮演</span>
+          <span class="tag tag-red">里程碑管理</span>
+          <span class="tag tag-red">情境化学习</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MULTI-AGENT INTERACTION -->
+<section>
+  <div class="container">
+    <div class="section-label">Multi-Agent Experience</div>
+    <h2>不只是 AI 讲课<br>而是一间活的教室</h2>
+    <p class="section-desc">多智能体协作，让培训变成真正的互动研讨</p>
+
+    <!-- Chat Demo -->
+    <div class="chat-demo">
+      <div class="chat-header">
+        <div class="agent-dots">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+        </div>
+        <span>OpenMAIC 课堂 · 《SMT 贴片机换型作业规程》</span>
+      </div>
+      <div class="chat-body">
+        <div class="msg">
+          <div class="avatar av-teacher">师</div>
+          <div class="bubble bubble-teacher">
+            <div class="bubble-name bn-teacher">AI 主讲老师</div>
+            在换型作业中，夹具更换后的首件验证是最关键的环节。接下来我会在白板上演示 AOI 检测的判断逻辑，请同学们注意对焦区域……
+          </div>
+        </div>
+        <div class="msg">
+          <div class="avatar av-peer">甲</div>
+          <div class="bubble bubble-peer">
+            <div class="bubble-name bn-peer">AI 学员 A</div>
+            老师，如果首件的焊点高度偏差在 ±15% 以内，是不是可以直接放行？还是说需要重新调参？
+          </div>
+        </div>
+        <div class="msg right">
+          <div class="avatar av-user">我</div>
+          <div class="bubble bubble-user">
+            <div class="bubble-name bn-user" style="text-align:right">你（员工）</div>
+            我们厂规定偏差超 ±10% 就要停线，请问这个阈值是怎么来的？
+          </div>
+        </div>
+        <div class="msg">
+          <div class="avatar av-teacher">师</div>
+          <div class="bubble bubble-teacher">
+            <div class="bubble-name bn-teacher">AI 主讲老师</div>
+            好问题！±10% 是基于 IPC-A-610 标准结合贵司 Cpk ≥ 1.33 的工艺能力要求来的。[在白板上绘制正态分布图] 可以看到……
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modes -->
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 20px;">
+      <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px;">
+        <div style="font-size: 13px; font-weight: 500; margin-bottom: 6px;">💬 课堂讨论模式</div>
+        <div style="font-size: 12px; color: var(--text-secondary);">AI 主动发起讨论，员工可随时插话提问，模拟真实班组研讨氛围。</div>
+      </div>
+      <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px;">
+        <div style="font-size: 13px; font-weight: 500; margin-bottom: 6px;">🔄 圆桌辩论模式</div>
+        <div style="font-size: 12px; color: var(--text-secondary);">多个 AI 持不同立场（如：精益派 vs 稳健派）展开辩论，帮助员工建立多维思考框架。</div>
+      </div>
+      <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px;">
+        <div style="font-size: 13px; font-weight: 500; margin-bottom: 6px;">❓ 随问随答模式</div>
+        <div style="font-size: 12px; color: var(--text-secondary);">随时打断提问，AI 老师用幻灯片、白板手绘或语音讲解即时响应。</div>
+      </div>
+      <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px;">
+        <div style="font-size: 13px; font-weight: 500; margin-bottom: 6px;">🎤 语音输入支持</div>
+        <div style="font-size: 12px; color: var(--text-secondary);">支持麦克风输入，车间员工戴手套也能直接说话互动，无需打字。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="container">
+    <div class="section-label">Manufacturing Use Cases</div>
+    <h2>在制造业的典型应用场景</h2>
+    <p class="section-desc">从新人入职到老员工技能升级，全岗位覆盖</p>
+
+    <div class="usecase-grid">
+      <div class="usecase-card">
+        <div class="uc-icon">🔩</div>
+        <div class="uc-title">设备操作培训</div>
+        <div class="uc-desc">上传设备手册，自动生成含操作步骤演示、常见故障判断的互动课程。</div>
+      </div>
+      <div class="usecase-card">
+        <div class="uc-icon">🦺</div>
+        <div class="uc-title">安全规程培训</div>
+        <div class="uc-desc">将 EHS 规程转化为情景化问答，AI 模拟事故场景，提升安全意识。</div>
+      </div>
+      <div class="usecase-card">
+        <div class="uc-icon">📋</div>
+        <div class="uc-title">SOP 知识内化</div>
+        <div class="uc-desc">员工上传作业指导书，通过讲解+测验+模拟三轮加深理解，降低因理解偏差导致的不良。</div>
+      </div>
+      <div class="usecase-card">
+        <div class="uc-icon">🔍</div>
+        <div class="uc-title">质量检验标准</div>
+        <div class="uc-desc">上传检验标准图文，AI 生成缺陷识别测验，辅助质检员提升判断准确率。</div>
+      </div>
+      <div class="usecase-card">
+        <div class="uc-icon">🏭</div>
+        <div class="uc-title">新员工入厂培训</div>
+        <div class="uc-desc">将公司介绍、厂规厂纪、组织架构打包，一键生成自助完成的入厂课堂。</div>
+      </div>
+      <div class="usecase-card">
+        <div class="uc-icon">📈</div>
+        <div class="uc-title">工艺改善提案</div>
+        <div class="uc-desc">基于工艺数据和改善案例，生成 PBL 项目任务，让团队在 AI 引导下共同推演改善方案。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO USE -->
+<section>
+  <div class="container">
+    <div class="section-label">Quick Start</div>
+    <h2>三步开始使用</h2>
+    <p class="section-desc">最快 5 分钟即可体验，无需部署</p>
+
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-line"></div>
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">打开在线 Demo 或一键部署</div>
+          <div class="step-desc">访问 <strong style="color: var(--amber);">open.maic.chat</strong> 直接体验，或通过 Vercel 一键克隆部署自己的实例（需要 OpenAI / 国内大模型 API Key）。</div>
+          <div class="step-example">▸ 推荐模型：Gemini Flash（速度最快）/ DeepSeek V3（国内可用）</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-line"></div>
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">输入话题或上传文档</div>
+          <div class="step-desc">直接描述想培训的内容（如"SMT 换型作业规程"），或上传 PDF 格式的手册、标准、指导书。AI 自动分析并生成课堂大纲。</div>
+          <div class="step-example">▸ 例：上传《设备点检作业标准.pdf》→ AI 生成 8 节互动课</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">进入课堂，开始学习</div>
+          <div class="step-desc">AI 教师开始讲解，随时提问打断，完成测验验证理解。课后可导出 PPT 或 HTML 页面供后续复习或分发。</div>
+          <div class="step-example">▸ 全程支持中文语音交互，手机端也可使用</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH SPECS -->
+<section>
+  <div class="container">
+    <div class="section-label">Tech Specs</div>
+    <h2>技术规格参考</h2>
+    <p class="section-desc">开源可私有化部署，数据不出厂</p>
+
+    <table class="spec-table" style="background: var(--bg2); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border);">
+      <thead>
+        <tr>
+          <th style="border-radius: var(--radius-lg) 0 0 0;">项目</th>
+          <th>详情</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>开源协议</td>
+          <td>AGPL-3.0（可商业授权，联系清华 MAIC 团队）</td>
+        </tr>
+        <tr>
+          <td>支持的大模型</td>
+          <td>OpenAI GPT-4o · Anthropic Claude · Google Gemini · DeepSeek · 任意 OpenAI 兼容接口</td>
+        </tr>
+        <tr>
+          <td>部署方式</td>
+          <td><span class="check">✓</span> 在线 Demo &nbsp; <span class="check">✓</span> Vercel 一键部署 &nbsp; <span class="check">✓</span> Docker 私有化 &nbsp; <span class="check">✓</span> 本地开发</td>
+        </tr>
+        <tr>
+          <td>文档解析</td>
+          <td>支持 PDF（含表格、公式 OCR，接入 MinerU 增强解析）</td>
+        </tr>
+        <tr>
+          <td>输出格式</td>
+          <td>可导出 .pptx 幻灯片 · 独立 .html 互动页面</td>
+        </tr>
+        <tr>
+          <td>语音能力</td>
+          <td>TTS 语音讲解 · 麦克风语音输入（ASR）</td>
+        </tr>
+        <tr>
+          <td>消息平台集成</td>
+          <td>飞书 · Slack · Telegram · Discord · WhatsApp（通过 OpenClaw 接入）</td>
+        </tr>
+        <tr>
+          <td>界面语言</td>
+          <td><span class="check">✓</span> 中文 &nbsp; <span class="check">✓</span> 英文</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- VALUE -->
+<section>
+  <div class="container">
+    <div class="section-label">Value</div>
+    <h2>核心价值主张</h2>
+    <p class="section-desc">相比传统培训模式的量化优势</p>
+
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="value-num">5<span style="font-size: 1.2rem;">min</span></div>
+        <div class="value-label">一份文档变成完整课堂<br>的平均生成时间</div>
+      </div>
+      <div class="value-card">
+        <div class="value-num">4<span style="font-size: 1.2rem;">种</span></div>
+        <div class="value-label">课堂形态<br>覆盖讲授·测验·实验·项目</div>
+      </div>
+      <div class="value-card">
+        <div class="value-num">∞</div>
+        <div class="value-label">AI 教师耐心<br>任意追问不限次数</div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 24px;">
+      <div class="hb-icon">🔒</div>
+      <div>
+        <p class="hb-title">数据安全说明</p>
+        <p class="hb-body">
+          OpenMAIC 支持 Docker 完整私有化部署在制造中心内网，工艺文件和培训数据无需上传任何第三方平台。大模型 API 可接入国内合规厂商（如 DeepSeek、通义千问）。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="container">
+    <div class="footer-logo">Open<span>MAIC</span></div>
+    <div class="footer-links">
+      <a href="https://open.maic.chat/" target="_blank">在线 Demo</a>
+      <a href="https://github.com/THU-MAIC/OpenMAIC" target="_blank">GitHub</a>
+      <a href="https://jcst.ict.ac.cn/en/article/doi/10.1007/s11390-025-6000-0" target="_blank">研究论文</a>
+    </div>
+    <p class="footer-note">由制造中心 AI 社群整理推荐 · 清华大学 MAIC 团队开源</p>
+  </div>
+</div>
+
+</body>
+</html>
